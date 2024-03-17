@@ -1,0 +1,55 @@
+
+<!-- importmaps to allow create consistent path for resources -->
+<script type="importmap">
+{
+	"imports": {
+		"@orbital": "./node_modules/orbital/sys/sys.js",
+		"@orbital/sys/uuid": "./node_modules/orbital/sys/uuid.js"
+	}
+}
+</script>
+
+<!-- client side bootstrap -->
+<script type="module">
+
+import { Sys } from '@orbital'
+import { client_create_uuid } from '@orbital/sys/uuid'
+
+const config = {
+	systemid: client_create_uuid(),
+    server: (typeof window === 'undefined') ? true : false,
+    port: 4000,
+    host: "orbital.foundation",
+	importmaps: {
+		'anchor':"/",
+		'orbital':"/node_modules/orbital",
+		'cloudreef':"/",
+	}
+}
+
+const sys = new Sys(config)
+
+//
+// load manifest.js from the best possible path given the client browser url
+//
+// hack around a path issue for spa apps
+// @todo for a spa app we are missing some information ... we have a slight hack here where we can look for a trailing / but this needs polish
+// an actual path ends with '/' - the server will force us there with a 302
+// so if we see one of these we want to look for a manifest INSIDE the current folder, not that folder as a full path
+//
+
+let path = window.location.pathname
+const tokens = path.split('/')
+if(tokens.length > 1 && !path.endsWith('/')) {
+	tokens.pop()
+	path = tokens.join('/')
+}
+
+const modules = [path,'manifest.js'].join('/').replace(/\/{1,}/g,'/')
+console.log("client boot - loading module from current url path=",modules)
+
+await sys.resolve({modules})
+
+sys.run()
+
+</script>

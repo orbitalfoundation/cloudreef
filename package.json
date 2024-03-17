@@ -1,0 +1,11 @@
+{
+  "name": "cloudreef",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "node server.mjs"
+  },
+  "dependencies": {
+    "orbital": "0.0.3"
+  },
+  "license": "MIT"
+}
