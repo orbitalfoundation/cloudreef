@@ -54,12 +54,13 @@ function swim(event,entity,sys) {
 }
 
 function observer(args) {
+	if(args.blob.name=='tick') return
 	if(!args || !args.entity || !args.fresh || !args.entity.swim || args.entity.network_remote) return false
 	if (typeof window === 'undefined' || document === 'undefined') {
 		console.error("swimming: should not be run on server")
 		return false
 	}
-	console.log("thunniform: registering a handler once")
+	console.log("swim: registering a handler once")
 	document.addEventListener('keydown',(event) => {
 		swim(event,args.entity,args.sys)
 	})

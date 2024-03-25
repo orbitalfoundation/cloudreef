@@ -1,3 +1,8 @@
+// @todo hmmm i need some concept of local resources...
+let path = new URL(import.meta.url).pathname
+path = path.slice(0,path.lastIndexOf("/"))
+
+
 
 ///
 /// client side manifest
@@ -32,22 +37,24 @@ const metadata = {
 
 const dependencies = {
 	dependencies: [
-		'orbital/paper/paper.js',
-		'orbital/volume-babylon3d/volume-babylon3d.js',
-		'orbital/net/network.js',
-		'/scripts/swim.mjs'
+		'@orbital/paper/paper.js',
+		'@orbital/volume-babylon3d/volume-babylon3d.js',
+		'@orbital/net/network.js',
+		path+'/scripts/swim.mjs'
 	]
 }
 
 const volume1 = {
 	volume: 'volume1',
-	uuid:"cloudreef/volume1",
+	name:'volume1',
+	uuid:'cloudreef/volume1',
 	surface: true
 }
 
 const camera1 = {
 	volume: 'volume1',
-	uuid:"cloudreef/camera1",
+	name:"camera1",
+	uuid:'cloudreef/camera1',
 	transform:{
 		xyz:[0,2,5],
 		lookat:[0,0,0]
@@ -57,7 +64,8 @@ const camera1 = {
 
 const light1 = {
 	volume: 'volume1',
-	uuid:"cloudreef/light1",
+	name:'light1',
+	uuid:'cloudreef/light1',
 	transform:{
 		xyz:[10,10,10],
 		lookat:[0,0,0]
@@ -70,7 +78,8 @@ const light1 = {
 
 const light2 = {
 	volume: 'volume1',
-	uuid:"cloudreef/light2",
+	name:'light2',
+	uuid:'cloudreef/light2',
 	light:{
 		type:'ambient'
 	}
@@ -78,7 +87,8 @@ const light2 = {
 
 const ground1 = {
 	volume: 'volume1',
-	uuid:"cloudreef/ground1",
+	name:'ground1',
+	uuid:'cloudreef/ground1',
 	transform: {
 		xyz:[0,-0.1,0],
 		ypr:[0,0,0],
@@ -95,8 +105,9 @@ const ground1 = {
 
 const avatar1 = {
 	name: 'avatar1-[UUID]',
+	name: 'avatar1',
 	volume: 'volume1',
-	uuid:"cloudreef/avatar1",
+	uuid:'cloudreef/avatar1',
 	transform:{
 		whd:[1,1,1],
 		xyz:[0,1,0],
@@ -112,7 +123,8 @@ const avatar1 = {
 
 const reef1 = {
 	volume: 'volume1',
-	uuid:"cloudreef/reef1",
+	name:'reef1',
+	uuid:'cloudreef/reef1',
 	credits: `'Coral reef small' (https://skfb.ly/6RPFV) by Miguelangelo Rosario is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).`,
 	geometry:'./art/coral-reef-small.glb', // @todo the basepath should be relative to the project not include it??? debate
 	transform:{
@@ -127,11 +139,12 @@ const reef1 = {
 
 const website1 = {
 	paper:true,
-	uuid:"cloudreef/website1",
-	name:"volume1", // must have a name or uuid to be visible to the query engine for the router to pick it up and paint it
+	name:'website1',
+	uuid:'cloudreef/website1',
+	name:'volume1', // must have a name or uuid to be visible to the query engine for the router to pick it up and paint it
 	id:'volume1', // this id will be written into the dom and then picked up as the rendering context for the 3d view
 	css:`margin:0;padding:0;height:100%;width:100%;position:absolute;left:0;top:0`,
-	content:`<div style='position:absolute;left:8;top:0;'>
+	content:`<div style="position:absolute;left:8;top:0;">
 		<div style="font-size:2em;display:flex;justify-content:left;align-items:center">
 			<a extern=true href="/" style='font-size:2em;margin-top:-8px;color:#e0e0e0;text-decoration:none'>⚈</a>
 			<!--<div>&nbsp;</div><div style="color:white">Orbital</div> -->
@@ -139,7 +152,7 @@ const website1 = {
 	</div>`
 }
 
-const entries = {
+const content = [
 	website1,
 	volume1,
 	camera1,
@@ -148,17 +161,12 @@ const entries = {
 	ground1,
 	avatar1,
 	reef1,
-}
-
-// hack - pluck javascripts variable name and stuff it into each object
-
-Object.keys(entries).forEach(key=>{ if(!entries[key].name) entries[key].name = key })
-const content = Object.values(entries)
+]
 
 // throw this datagram to the server to order it to send a fresh copy of local state in this path
 
 const fresh_copy_request = {
-	about:"ask server for a fresh copy of state",
+	about:'ask server for a fresh copy of state',
 	network:true,
 	server_query:{}
 }

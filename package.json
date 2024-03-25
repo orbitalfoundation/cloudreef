@@ -2,7 +2,7 @@
   "name": "cloudreef",
   "version": "0.0.1",
   "scripts": {
-    "dev": "node server.mjs"
+    "dev": "node node_modules/orbital/orbital-server.mjs"
   },
   "dependencies": {
     "orbital": "0.0.3"
